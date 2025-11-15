@@ -5,12 +5,23 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import EventsList from './pages/EventsList';
 import EventDetails from './pages/EventDetails';
+import CreateEvent from './pages/CreateEvent';
+import EditEvent from './pages/EditEvent';
+import MyEvents from './pages/MyEvents';
+import EventRegistration from './pages/EventRegistration';
+import MyRegistrations from './pages/MyRegistrations';
 import Layout from './components/Layout';
 
 // Protected route component
 function ProtectedRoute({ children }) {
   const { user } = useAuth();
   return user ? children : <Navigate to="/login" />;
+}
+
+// Organizer-only route component
+function OrganizerRoute({ children }) {
+  const { user } = useAuth();
+  return user && user.role === 'organizer' ? children : <Navigate to="/events" />;
 }
 
 // Public route component (redirect to events if already logged in)
@@ -60,32 +71,55 @@ function App() {
             } 
           />
           
-          {/* Protected Routes - Only accessible when logged in */}
+          {/* Protected Routes - Organizers Only */}
           <Route 
-            path="/dashboard" 
+            path="/events/create" 
             element={
-              <ProtectedRoute>
+              <OrganizerRoute>
                 <Layout>
-                  <div style={{ padding: '2rem', textAlign: 'center' }}>
-                    <h1>Dashboard</h1>
-                    <p>Dashboard page - Coming soon in Phase 2!</p>
-                    <p>This will show user statistics, recent activities, and quick actions.</p>
-                  </div>
+                  <CreateEvent />
                 </Layout>
-              </ProtectedRoute>
+              </OrganizerRoute>
+            } 
+          />
+          <Route 
+            path="/events/:id/edit" 
+            element={
+              <OrganizerRoute>
+                <Layout>
+                  <EditEvent />
+                </Layout>
+              </OrganizerRoute>
             } 
           />
           
+          {/* Protected Routes - All Logged-in Users */}
           <Route 
             path="/my-events" 
             element={
               <ProtectedRoute>
                 <Layout>
-                  <div style={{ padding: '2rem', textAlign: 'center' }}>
-                    <h1>My Events</h1>
-                    <p>My Events page - Coming soon in Phase 2!</p>
-                    <p>Organizers will see events they created, participants will see events they registered for.</p>
-                  </div>
+                  <MyEvents />
+                </Layout>
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/events/:id/register" 
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <EventRegistration />
+                </Layout>
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/my-registrations" 
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <MyRegistrations />
                 </Layout>
               </ProtectedRoute>
             } 
@@ -98,8 +132,7 @@ function App() {
                 <Layout>
                   <div style={{ padding: '2rem', textAlign: 'center' }}>
                     <h1>Profile</h1>
-                    <p>Profile page - Coming soon in Phase 2!</p>
-                    <p>Users will be able to view and edit their profile information.</p>
+                    <p>Profile page - Coming soon in Phase 3!</p>
                   </div>
                 </Layout>
               </ProtectedRoute>

@@ -11,7 +11,7 @@ export const api = {
   feedback: `${API_BASE}/feedback.php`,
 };
 
-// Generic fetch helper
+// Generic fetch helper with error handling
 export const fetchAPI = async (url, options = {}) => {
   try {
     const response = await fetch(url, {
@@ -21,8 +21,14 @@ export const fetchAPI = async (url, options = {}) => {
       },
       ...options,
     });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
     return await response.json();
   } catch (error) {
-    throw new Error('Network error');
+    console.error('API Error:', error);
+    throw new Error('Network error: ' + error.message);
   }
 };

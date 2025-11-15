@@ -1,258 +1,228 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import './Layout.css'; // We'll create this CSS file
 
 export default function Layout({ children }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
     navigate('/login');
-    setMenuOpen(false);
   };
 
   const isActiveRoute = (path) => {
     return location.pathname === path;
   };
 
-  const closeMenu = () => {
-    setMenuOpen(false);
-  };
+  const navLinkStyles = (isActive) => ({
+    padding: '0.5rem 1rem',
+    borderRadius: '0.375rem',
+    fontWeight: '600',
+    textDecoration: 'none',
+    transition: 'all 0.2s ease-in-out',
+    color: isActive ? '#2563eb' : '#64748b',
+    backgroundColor: isActive ? '#eff6ff' : 'transparent',
+    border: isActive ? '1px solid #dbeafe' : '1px solid transparent'
+  });
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc' }}>
-      {/* CodePen Navbar */}
-      <nav>
-        <div className="navbar">
-          <div className="container nav-container">
-            <input 
-              className="checkbox" 
-              type="checkbox" 
-              checked={menuOpen}
-              onChange={(e) => setMenuOpen(e.target.checked)}
-            />
-            <div className="hamburger-lines">
-              <span className="line line1"></span>
-              <span className="line line2"></span>
-              <span className="line line3"></span>
-            </div>  
-            
+    <div style={{ 
+      minHeight: '100vh', 
+      backgroundColor: '#f8fafc',
+      display: 'flex',
+      flexDirection: 'column'
+    }}>
+      {/* Header */}
+      <header style={{
+        backgroundColor: '#ffffff',
+        borderBottom: '1px solid #e2e8f0',
+        boxShadow: '0 1px 3px 0 rgb(0 0 0 / 0.1)',
+        position: 'sticky',
+        top: 0,
+        zIndex: 50
+      }}>
+        <div className="container">
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            height: '4rem'
+          }}>
             {/* Logo */}
-            <div className="logo">
-              <Link to="/" style={{ textDecoration: 'none', color: '#0e2431' }}>
-                <h1>SmartEvents</h1>
-              </Link>
-            </div>
+            <Link 
+              to="/events" 
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                textDecoration: 'none',
+                fontWeight: '700',
+                fontSize: '1.5rem',
+                color: '#1e293b'
+              }}
+            >
+              <div style={{
+                width: '2rem',
+                height: '2rem',
+                backgroundColor: '#2563eb',
+                borderRadius: '0.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'white',
+                fontSize: '1rem',
+                fontWeight: 'bold'
+              }}>
+                S
+              </div>
+              Smart Events
+            </Link>
 
-            {/* Menu Items */}
-            <div className="menu-items">
+            {/* Desktop Navigation */}
+            <nav style={{ 
+              display: 'flex', 
+              alignItems: 'center',
+              gap: '0.5rem'
+            }}>
               {user ? (
-                // Logged-in User Menu
                 <>
-                  <li>
-                    <Link 
-                      to="/dashboard" 
-                      onClick={closeMenu}
-                      style={{ 
-                        color: isActiveRoute('/dashboard') ? '#2563eb' : '#0e2431',
-                        fontWeight: isActiveRoute('/dashboard') ? '600' : '500'
-                      }}
-                    >
-                      📊 Dashboard
-                    </Link>
-                  </li>
+                  <Link 
+                    to="/events" 
+                    style={navLinkStyles(isActiveRoute('/events'))}
+                  >
+                    Events
+                  </Link>
                   
-                  <li>
-                    <Link 
-                      to="/events" 
-                      onClick={closeMenu}
-                      style={{ 
-                        color: isActiveRoute('/events') ? '#2563eb' : '#0e2431',
-                        fontWeight: isActiveRoute('/events') ? '600' : '500'
-                      }}
-                    >
-                      📅 All Events
-                    </Link>
-                  </li>
-
-                  {/* Organizer Specific */}
                   {user.role === 'organizer' && (
-                    <>
-                      <li>
-                        <Link 
-                          to="/events/create" 
-                          onClick={closeMenu}
-                          style={{ 
-                            color: isActiveRoute('/events/create') ? '#2563eb' : '#0e2431',
-                            fontWeight: isActiveRoute('/events/create') ? '600' : '500'
-                          }}
-                        >
-                          ➕ Create Event
-                        </Link>
-                      </li>
-                      
-                      <li>
-                        <Link 
-                          to="/my-events" 
-                          onClick={closeMenu}
-                          style={{ 
-                            color: isActiveRoute('/my-events') ? '#2563eb' : '#0e2431',
-                            fontWeight: isActiveRoute('/my-events') ? '600' : '500'
-                          }}
-                        >
-                          🎯 My Events
-                        </Link>
-                      </li>
-                    </>
-                  )}
-
-                  {/* Participant Specific */}
-                  {user.role === 'participant' && (
-                    <li>
-                      <Link 
-                        to="/my-registrations" 
-                        onClick={closeMenu}
-                        style={{ 
-                          color: isActiveRoute('/my-registrations') ? '#2563eb' : '#0e2431',
-                          fontWeight: isActiveRoute('/my-registrations') ? '600' : '500'
-                        }}
-                      >
-                        📋 My Registrations
-                      </Link>
-                    </li>
-                  )}
-
-                  <li>
                     <Link 
-                      to="/notifications" 
-                      onClick={closeMenu}
-                      style={{ 
-                        color: isActiveRoute('/notifications') ? '#2563eb' : '#0e2431',
-                        fontWeight: isActiveRoute('/notifications') ? '600' : '500'
-                      }}
+                      to="/events/create" 
+                      style={navLinkStyles(isActiveRoute('/events/create'))}
                     >
-                      🔔 Notifications
+                      Create Event
                     </Link>
-                  </li>
+                  )}
+                  
+                  <Link 
+                    to={user.role === 'organizer' ? '/my-events' : '/my-registrations'} 
+                    style={navLinkStyles(
+                      isActiveRoute(user.role === 'organizer' ? '/my-events' : '/my-registrations')
+                    )}
+                  >
+                    {user.role === 'organizer' ? 'My Events' : 'My Registrations'}
+                  </Link>
+                  
+                  <Link 
+                    to="/dashboard" 
+                    style={navLinkStyles(isActiveRoute('/dashboard'))}
+                  >
+                    Dashboard
+                  </Link>
 
-                  {/* User Info */}
-                  <li style={{ 
-                    marginTop: '2rem', 
-                    paddingTop: '1rem', 
-                    borderTop: '2px solid #e2e8f0' 
+                  {/* User Menu */}
+                  <div style={{ 
+                    position: 'relative',
+                    marginLeft: '1rem',
+                    paddingLeft: '1rem',
+                    borderLeft: '1px solid #e2e8f0'
                   }}>
                     <div style={{ 
-                      textAlign: 'center', 
-                      marginBottom: '1rem',
-                      color: '#64748b'
+                      display: 'flex', 
+                      alignItems: 'center',
+                      gap: '0.75rem'
                     }}>
-                      <div style={{ fontWeight: '600', color: '#0e2431' }}>
-                        {user.full_name}
+                      <div style={{ textAlign: 'right' }}>
+                        <div style={{ 
+                          fontWeight: '600',
+                          fontSize: '0.875rem',
+                          color: '#1e293b'
+                        }}>
+                          {user.full_name}
+                        </div>
+                        <div style={{ 
+                          fontSize: '0.75rem',
+                          color: '#64748b',
+                          textTransform: 'capitalize'
+                        }}>
+                          {user.role}
+                        </div>
                       </div>
-                      <div style={{ 
-                        fontSize: '0.9rem', 
-                        textTransform: 'capitalize',
-                        color: '#2563eb'
+                      
+                      <div style={{
+                        width: '2.5rem',
+                        height: '2.5rem',
+                        backgroundColor: '#2563eb',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'white',
+                        fontWeight: '600',
+                        fontSize: '0.875rem'
                       }}>
-                        {user.role}
+                        {user.full_name.charAt(0).toUpperCase()}
                       </div>
+
+                      <button
+                        onClick={handleLogout}
+                        style={{
+                          padding: '0.5rem 1rem',
+                          backgroundColor: 'transparent',
+                          color: '#64748b',
+                          border: '1px solid #d1d5db',
+                          borderRadius: '0.375rem',
+                          cursor: 'pointer',
+                          fontSize: '0.875rem',
+                          fontWeight: '500',
+                          transition: 'all 0.2s ease-in-out'
+                        }}
+                        onMouseOver={(e) => {
+                          e.target.style.backgroundColor = '#fef2f2';
+                          e.target.style.color = '#dc2626';
+                          e.target.style.borderColor = '#fecaca';
+                        }}
+                        onMouseOut={(e) => {
+                          e.target.style.backgroundColor = 'transparent';
+                          e.target.style.color = '#64748b';
+                          e.target.style.borderColor = '#d1d5db';
+                        }}
+                      >
+                        Logout
+                      </button>
                     </div>
-                  </li>
-
-                  <li>
-                    <Link 
-                      to="/profile" 
-                      onClick={closeMenu}
-                      style={{ 
-                        color: isActiveRoute('/profile') ? '#2563eb' : '#0e2431',
-                        fontWeight: isActiveRoute('/profile') ? '600' : '500'
-                      }}
-                    >
-                      👤 My Profile
-                    </Link>
-                  </li>
-
-                  <li>
-                    <button
-                      onClick={handleLogout}
-                      style={{
-                        background: 'none',
-                        border: 'none',
-                        color: '#dc2626',
-                        fontSize: '1.2rem',
-                        fontWeight: '500',
-                        cursor: 'pointer',
-                        padding: '0.7rem',
-                        width: '100%',
-                        textAlign: 'left',
-                        fontFamily: 'Poppins, sans-serif'
-                      }}
-                    >
-                      🚪 Logout
-                    </button>
-                  </li>
+                  </div>
                 </>
               ) : (
-                // Public Menu
-                <>
-                  <li>
-                    <Link 
-                      to="/events" 
-                      onClick={closeMenu}
-                      style={{ 
-                        color: isActiveRoute('/events') ? '#2563eb' : '#0e2431',
-                        fontWeight: isActiveRoute('/events') ? '600' : '500'
-                      }}
-                    >
-                      📅 Browse Events
-                    </Link>
-                  </li>
-                  
-                  <li>
-                    <Link 
-                      to="/login" 
-                      onClick={closeMenu}
-                      style={{ 
-                        color: isActiveRoute('/login') ? '#2563eb' : '#0e2431',
-                        fontWeight: isActiveRoute('/login') ? '600' : '500'
-                      }}
-                    >
-                      🔑 Login
-                    </Link>
-                  </li>
-                  
-                  <li>
-                    <Link 
-                      to="/register" 
-                      onClick={closeMenu}
-                      style={{ 
-                        color: isActiveRoute('/register') ? '#2563eb' : '#0e2431',
-                        fontWeight: isActiveRoute('/register') ? '600' : '500',
-                        backgroundColor: '#2563eb',
-                        color: 'white',
-                        padding: '0.7rem 1.5rem',
-                        borderRadius: '0.5rem',
-                        display: 'inline-block'
-                      }}
-                    >
-                      ✨ Get Started
-                    </Link>
-                  </li>
-                </>
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <Link 
+                    to="/login" 
+                    style={navLinkStyles(isActiveRoute('/login'))}
+                  >
+                    Login
+                  </Link>
+                  <Link 
+                    to="/register" 
+                    style={{
+                      ...navLinkStyles(isActiveRoute('/register')),
+                      backgroundColor: '#2563eb',
+                      color: 'white'
+                    }}
+                  >
+                    Register
+                  </Link>
+                </div>
               )}
-            </div>
+            </nav>
           </div>
         </div>
-      </nav>
+      </header>
 
       {/* Main Content */}
       <main style={{ 
-        padding: '2rem 0',
-        minHeight: 'calc(100vh - 62px)'
+        flex: 1,
+        padding: '2rem 0'
       }}>
         <div className="container">
           {children}
@@ -263,15 +233,14 @@ export default function Layout({ children }) {
       <footer style={{
         backgroundColor: '#1e293b',
         color: 'white',
-        padding: '3rem 0 2rem',
+        padding: '2rem 0',
         marginTop: 'auto'
       }}>
         <div className="container">
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-            gap: '2rem',
-            marginBottom: '2rem'
+            gap: '2rem'
           }}>
             <div>
               <h4 style={{ color: 'white', marginBottom: '1rem' }}>Smart Events</h4>
@@ -284,8 +253,8 @@ export default function Layout({ children }) {
               <h4 style={{ color: 'white', marginBottom: '1rem' }}>Quick Links</h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 <Link to="/events" style={{ color: '#94a3b8' }}>Browse Events</Link>
-                <Link to="/dashboard" style={{ color: '#94a3b8' }}>Dashboard</Link>
                 <Link to="/login" style={{ color: '#94a3b8' }}>Login</Link>
+                <Link to="/register" style={{ color: '#94a3b8' }}>Register</Link>
               </div>
             </div>
             

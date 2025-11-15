@@ -1,17 +1,14 @@
-const API_BASE = 'http://localhost/smart_event_system/backend/api';
+// Use proxy path
+const API_BASE = '/api/api';
 
 export const api = {
-  // Auth
   users: `${API_BASE}/users.php`,
-  
-  // Events
   events: `${API_BASE}/events.php`,
   eventRegistrations: `${API_BASE}/event_registrations.php`,
   attendance: `${API_BASE}/attendance.php`,
   feedback: `${API_BASE}/feedback.php`,
 };
 
-// Generic fetch helper with error handling
 export const fetchAPI = async (url, options = {}) => {
   try {
     const response = await fetch(url, {

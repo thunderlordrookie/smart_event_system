@@ -10,6 +10,11 @@ import EditEvent from './pages/EditEvent';
 import MyEvents from './pages/MyEvents';
 import EventRegistration from './pages/EventRegistration';
 import MyRegistrations from './pages/MyRegistrations';
+import AttendanceManagement from './pages/AttendanceManagement';
+import SubmitFeedback from './pages/SubmitFeedback';
+import ViewFeedback from './pages/ViewFeedback';
+import Dashboard from './pages/Dashboard';
+import Notifications from './pages/Notifications';
 import Layout from './components/Layout';
 
 // Protected route component
@@ -92,6 +97,26 @@ function App() {
               </OrganizerRoute>
             } 
           />
+          <Route 
+            path="/events/:id/attendance" 
+            element={
+              <OrganizerRoute>
+                <Layout>
+                  <AttendanceManagement />
+                </Layout>
+              </OrganizerRoute>
+            } 
+          />
+          <Route 
+            path="/events/:id/feedback/view" 
+            element={
+              <OrganizerRoute>
+                <Layout>
+                  <ViewFeedback />
+                </Layout>
+              </OrganizerRoute>
+            } 
+          />
           
           {/* Protected Routes - All Logged-in Users */}
           <Route 
@@ -124,15 +149,44 @@ function App() {
               </ProtectedRoute>
             } 
           />
-          
+          <Route 
+            path="/events/:id/feedback" 
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <SubmitFeedback />
+                </Layout>
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/dashboard" 
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Dashboard />
+                </Layout>
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/notifications" 
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Notifications />
+                </Layout>
+              </ProtectedRoute>
+            } 
+          />
           <Route 
             path="/profile" 
             element={
               <ProtectedRoute>
                 <Layout>
                   <div style={{ padding: '2rem', textAlign: 'center' }}>
-                    <h1>Profile</h1>
-                    <p>Profile page - Coming soon in Phase 3!</p>
+                    <h1>Profile Management</h1>
+                    <p>Advanced profile features - Coming soon!</p>
                   </div>
                 </Layout>
               </ProtectedRoute>

@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { fetchAPI, api } from '../services/api';
 
 const AuthContext = createContext();
 
@@ -21,15 +22,10 @@ export function AuthProvider({ children }) {
 
   const login = async (email, password) => {
     try {
-      const response = await fetch('http://localhost/smart_event_system/backend/api/users.php', {
+      const data = await fetchAPI(api.users, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify({ email, password }),
       });
-
-      const data = await response.json();
       
       if (data.success) {
         setUser(data.user);
@@ -39,27 +35,22 @@ export function AuthProvider({ children }) {
         return { success: false, error: data.error };
       }
     } catch (error) {
-      return { success: false, error: 'Network error' };
+      return { success: false, error: error.message || 'Network error' };
     }
   };
 
   const register = async (userData) => {
     try {
-      const response = await fetch('http://localhost/smart_event_system/backend/api/users.php', {
+      const data = await fetchAPI(api.users, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify({
           action: 'register',
           ...userData
         }),
       });
-
-      const data = await response.json();
       return data;
     } catch (error) {
-      return { success: false, error: 'Network error' };
+      return { success: false, error: error.message || 'Network error' };
     }
   };
 

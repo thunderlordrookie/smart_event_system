@@ -1,12 +1,12 @@
-// Use proxy path
-const API_BASE = '/api/api';
+// Backend API base URL
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api';
 
 export const api = {
-  users: `${API_BASE}/users.php`,
-  events: `${API_BASE}/events.php`,
-  eventRegistrations: `${API_BASE}/event_registrations.php`,
-  attendance: `${API_BASE}/attendance.php`,
-  feedback: `${API_BASE}/feedback.php`,
+  users: `${API_BASE}/users`,
+  events: `${API_BASE}/events`,
+  eventRegistrations: `${API_BASE}/registrations`,
+  attendance: `${API_BASE}/attendance`,
+  feedback: `${API_BASE}/feedback`,
 };
 
 export const fetchAPI = async (url, options = {}) => {

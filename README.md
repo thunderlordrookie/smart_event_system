@@ -1,123 +1,132 @@
-# Smart Event System - Backend API
+# Smart Event System
 
-Node.js backend API for the Smart Event System using Supabase as the database.
+A full-stack event management system built with React (frontend) and Node.js/Express with Supabase (backend).
 
 ## Features
 
-- RESTful API endpoints for events, users, registrations, attendance, and feedback
-- Supabase integration for database and authentication
-- Row Level Security (RLS) policies for data protection
-- CORS enabled for frontend integration
+- 🎫 Event creation and management
+- 👥 User registration and authentication
+- 📝 Event registration system
+- ✅ Attendance tracking
+- 💬 Feedback and ratings
+- 🔐 Row Level Security (RLS) for data protection
+
+## Tech Stack
+
+### Frontend
+- React 18
+- React Router
+- Vite
+
+### Backend
+- Node.js
+- Express.js
+- Supabase (PostgreSQL + Auth)
 
 ## Quick Start
 
-### 1. Install Dependencies
+### Prerequisites
+- Node.js (v18+)
+- npm
+- Supabase account (free tier works)
 
-```bash
-npm install
-```
+### Installation
 
-### 2. Set Up Environment Variables
+1. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   cd smart_event_system
+   ```
 
-Copy the example environment file:
+2. **Install dependencies:**
+   ```bash
+   # Backend
+   cd backend
+   npm install
+   
+   # Frontend
+   cd ../frontend
+   npm install
+   ```
 
-```bash
-cp env.example .env
-```
+3. **Set up Supabase:**
+   - Create a Supabase project at [supabase.com](https://supabase.com)
+   - Run the migration from `backend/supabase/migrations/001_initial_schema.sql`
+   - Get your API keys from Supabase dashboard
 
-Then edit `.env` and add your Supabase credentials:
-- `SUPABASE_URL`: Your Supabase project URL
-- `SUPABASE_ANON_KEY`: Your Supabase anon public key
-- `SUPABASE_SERVICE_ROLE_KEY`: Your Supabase service role key (keep secret!)
+4. **Configure environment:**
+   ```bash
+   cd backend
+   cp env.example .env
+   # Edit .env with your Supabase credentials
+   ```
 
-### 3. Run Database Migration
+5. **Start the servers:**
+   ```bash
+   # Terminal 1 - Backend
+   cd backend
+   npm run dev
+   
+   # Terminal 2 - Frontend
+   cd frontend
+   npm run dev
+   ```
 
-1. Go to your Supabase dashboard
-2. Navigate to SQL Editor
-3. Copy and paste the contents of `supabase/migrations/001_initial_schema.sql`
-4. Run the migration
+6. **Access the app:**
+   - Open [http://localhost:5173](http://localhost:5173)
 
-### 4. Start the Server
+## Documentation
 
-Development mode (with auto-reload):
-```bash
-npm run dev
-```
-
-Production mode:
-```bash
-npm start
-```
-
-The server will run on `http://localhost:3001` by default.
-
-## API Endpoints
-
-### Health Check
-- `GET /health` - Check if the API is running
-
-### Users
-- `GET /api/users` - Get all users or a specific user (`?user_id=...`)
-- `POST /api/users` - Register or login user
-
-### Events
-- `GET /api/events` - Get all events, by organizer (`?organizer_id=...`), or specific event (`?event_id=...`)
-- `POST /api/events` - Create a new event
-- `PUT /api/events` - Update an event
-- `DELETE /api/events` - Delete an event (`?event_id=...`)
-
-### Registrations
-- `GET /api/registrations` - Get registrations by event (`?event_id=...`) or user (`?user_id=...`)
-- `POST /api/registrations` - Register for an event
-- `DELETE /api/registrations` - Cancel registration (`?registration_id=...`)
-
-### Attendance
-- `GET /api/attendance` - Get attendance records (`?event_id=...`)
-- `POST /api/attendance` - Mark attendance
-
-### Feedback
-- `GET /api/feedback` - Get feedback (`?event_id=...`)
-- `POST /api/feedback` - Submit feedback
+- **[INSTALLATION.md](./INSTALLATION.md)** - Detailed installation guide
+- **[SUPABASE_SETUP.md](./SUPABASE_SETUP.md)** - Supabase setup instructions
+- **[SHARING_GUIDE.md](./SHARING_GUIDE.md)** - How to share this project with others
+- **[QUICK_START.md](./QUICK_START.md)** - Quick troubleshooting guide
 
 ## Project Structure
 
 ```
-backend/
-├── config/
-│   └── supabase.js       # Supabase client configuration
-├── routes/
-│   ├── users.js          # User routes
-│   ├── events.js         # Event routes
-│   ├── registrations.js  # Registration routes
-│   ├── attendance.js     # Attendance routes
-│   └── feedback.js       # Feedback routes
-├── supabase/
-│   └── migrations/
-│       └── 001_initial_schema.sql  # Database schema
-├── server.js             # Main server file
-├── package.json          # Dependencies
-└── .env                  # Environment variables (create from env.example)
+smart_event_system/
+├── backend/              # Node.js/Express backend
+│   ├── config/          # Configuration files
+│   ├── routes/          # API route handlers
+│   ├── supabase/        # Database migrations
+│   └── server.js        # Express server
+├── frontend/            # React frontend
+│   └── src/
+│       ├── components/  # React components
+│       ├── pages/       # Page components
+│       └── services/    # API services
+└── docs/                # Documentation
 ```
 
-## Environment Variables
+## API Endpoints
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `SUPABASE_URL` | Your Supabase project URL | Yes |
-| `SUPABASE_ANON_KEY` | Supabase anon public key | Yes |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key | Yes |
-| `PORT` | Server port (default: 3001) | No |
-| `NODE_ENV` | Environment (development/production) | No |
-| `ALLOWED_ORIGINS` | Comma-separated list of allowed CORS origins | No |
+- `GET /health` - Health check
+- `GET /api/users` - Get users
+- `POST /api/users` - Register/Login
+- `GET /api/events` - Get events
+- `POST /api/events` - Create event
+- `PUT /api/events` - Update event
+- `DELETE /api/events` - Delete event
+- `GET /api/registrations` - Get registrations
+- `POST /api/registrations` - Register for event
+- `DELETE /api/registrations` - Cancel registration
+- `GET /api/attendance` - Get attendance
+- `POST /api/attendance` - Mark attendance
+- `GET /api/feedback` - Get feedback
+- `POST /api/feedback` - Submit feedback
 
-## Development
+## Contributing
 
-The server uses Express.js and the Supabase JavaScript client. All database operations go through Supabase, which handles authentication and Row Level Security automatically.
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
 
-## Troubleshooting
+## License
 
-- **Connection errors**: Verify your `.env` file has correct Supabase credentials
-- **RLS errors**: Make sure you ran the database migration
-- **CORS errors**: Update `ALLOWED_ORIGINS` in `.env` to include your frontend URL
+ISC
 
-For more detailed setup instructions, see `../SUPABASE_SETUP.md`.
+## Support
+
+For issues and questions, please check the documentation files or open an issue in the repository.
